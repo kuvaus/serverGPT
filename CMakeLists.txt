@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 3.2)
 
+project(serverGPT)
+
 find_package(OpenSSL REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR}) 
 
@@ -14,7 +16,6 @@ if(APPLE)
   endif()
 endif()
 
-project(serverGPT)
 
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 2)

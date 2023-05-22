@@ -30,7 +30,7 @@ void from_json(const nlohmann::json& j, chatParams& params) {
     it = j.find("openai_api_key"); if (it != j.end()) { it->get_to(params.openai_api_key); }
     it = j.find("ssl_certificate"); if (it != j.end()) { it->get_to(params.ssl_certificate); }
     it = j.find("ssl_certificate_key"); if (it != j.end()) { it->get_to(params.ssl_certificate_key); }
-    it = j.find("ssl"); if (it != j.end()) { it->get_to(params.ssl); }
+    it = j.find("ssl_server"); if (it != j.end()) { it->get_to(params.ssl_server); }
 }
 
 void get_params_from_json(chatParams& params) {

@@ -98,7 +98,7 @@ struct chatParams {
         bool server = false;                //use http server
         std::string ssl_certificate = "";    //ssl certificate for https server
         std::string ssl_certificate_key = "";//ssl certificate key for https server
-        bool ssl = false;                    //use https server
+        bool ssl_server = false;             //use https server
 
 };
 

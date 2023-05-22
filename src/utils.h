@@ -272,6 +272,11 @@ void print_usage(int argc, char** argv, const chatParams& params) {
     fprintf(stderr, "  --repeat_last_n    N  last n tokens to penalize  (default: %d)\n", params.repeat_last_n);
     fprintf(stderr, "  --context_erase    N  percent of context to erase  (default: %.1f)\n", params.context_erase);
     fprintf(stderr, "  --server           N  enable http_server mode (default: no)\n");
+    fprintf(stderr, "  --ssl_server       N  enable SSL mode (default: no)\n");
+    fprintf(stderr, "  --ssl_certificate  FNAME\n");
+    fprintf(stderr, "                        load ssl_certificate at FNAME (default: empty/no)\n");
+    fprintf(stderr, "  --ssl_certificate_key  FNAME\n");
+    fprintf(stderr, "                        load ssl_certificate_key at FNAME (default: empty/no)\n");
     fprintf(stderr, "  --openai_api_key  FNAME or $OPENAI_API_KEY\n");
     fprintf(stderr, "                        Optional: for -m \"gpt-3-turbo\" or -m \"gpt-4\" (default: empty/no)\n");
     fprintf(stderr, "  -j,   --load_json FNAME\n");
@@ -337,6 +342,12 @@ bool parse_params(int argc, char** argv, chatParams& params) {
             params.save_log = argv[++i];
         } else if (arg == "--server") {
             params.server = true;
+        }else if (arg == "--ssl_server") {
+            params.ssl_server = true;
+        }else if (arg == "--ssl_certificate") {
+            params.ssl_certificate = argv[++i];
+        }else if (arg == "--ssl_certificate_key") {
+            params.ssl_certificate_key = argv[++i];
         } else if (arg == "--openai_api_key") {
             params.openai_api_key = argv[++i];
         } else if (arg == "-m" || arg == "--model") {

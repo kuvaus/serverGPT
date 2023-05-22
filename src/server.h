@@ -17,9 +17,9 @@ int server(chatParams &params, ConsoleState &con_st, llmodel_model &model, llmod
  
   Server *svr;
 
-  if (params.ssl) {
+  if (params.ssl_server) {
       //SSLServer svr = server(params.ssl_certificate, params.ssl_certificate_key);
-      svr = new SSLServer(params.ssl_certificate.data(), params.ssl_certificate_key.data());
+      svr = new SSLServer(params.ssl_certificate.c_str(), params.ssl_certificate_key.c_str());
   } else {
       svr = new Server();
   }

@@ -14,11 +14,18 @@ int server(chatParams &params, ConsoleState &con_st, llmodel_model &model, llmod
   
   using namespace httplib;
   using json = nlohmann::json;
+ 
+  Server *svr;
 
-  Server svr;
+  if (params.ssl) {
+      //SSLServer svr = server(params.ssl_certificate, params.ssl_certificate_key);
+      svr = new SSLServer(params.ssl_certificate.data(), params.ssl_certificate_key.data());
+  } else {
+      svr = new Server();
+  }
 
   //we get a server POST request
-  svr.Post("/v1/completions", [&params,&con_st,&model,&prompt_context,&prompt_template](const Request& req, Response& res) {
+  svr->Post("/v1/completions", [&params,&con_st,&model,&prompt_context,&prompt_template](const Request& req, Response& res) {
 
     std::string current_model = params.model;
     // Parse request body as JSON
@@ -97,7 +104,8 @@ int server(chatParams &params, ConsoleState &con_st, llmodel_model &model, llmod
   });
 
   //listen port 5891 (1985 = 1984 + 1 backwards)
-  svr.listen("localhost", 5891);
+  //svr->listen("localhost", 5891);
+  svr->listen("0.0.0.0", 5891);
   llmodel_model_destroy(model);
 }
 

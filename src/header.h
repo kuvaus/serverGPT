@@ -94,7 +94,11 @@ struct chatParams {
         std::string save_log = "";          //saved chat log file location
         std::string openai_api_key = "";    //openai api key for chatgpt only
         bool openai = false;                //use openai
+        //server-related parameters. You can load from json
         bool server = false;                //use http server
+        std::string ssl_certificate = "";    //ssl certificate for https server
+        std::string ssl_certificate_key = "";//ssl certificate key for https server
+        bool ssl = false;                    //use https server
 
 };
 

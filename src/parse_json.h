@@ -26,6 +26,7 @@ void from_json(const nlohmann::json& j, chatParams& params) {
     it = j.find("load_template"); if (it != j.end()) { it->get_to(params.load_template); }
     it = j.find("load_json"); if (it != j.end()) { it->get_to(params.load_json); }
     it = j.find("save_log"); if (it != j.end()) { it->get_to(params.save_log); }
+    it = j.find("load_log"); if (it != j.end()) { it->get_to(params.load_log); }
     it = j.find("server"); if (it != j.end()) { it->get_to(params.server); }
     it = j.find("openai_api_key"); if (it != j.end()) { it->get_to(params.openai_api_key); }
     it = j.find("ssl_certificate"); if (it != j.end()) { it->get_to(params.ssl_certificate); }

@@ -65,12 +65,27 @@ void display_loading() {
 
 
 
-std::string get_input(ConsoleState& con_st, std::string& input, llmodel_model model = nullptr) {
+std::string get_input(ConsoleState& con_st, std::string& input, chatParams params, llmodel_prompt_context &prompt_context, llmodel_model model = nullptr) {
     set_console_color(con_st, USER_INPUT);
 
     std::cout << "\n> ";
     std::getline(std::cin, input);
     set_console_color(con_st, DEFAULT);
+
+    if (input == "resetchat") {
+    	//reset the logits, tokens and past conversation
+        prompt_context.logits = params.logits;
+        prompt_context.logits_size = params.logits_size;
+        prompt_context.tokens = params.tokens;
+        prompt_context.tokens_size = params.tokens_size;
+        prompt_context.n_past = params.n_past;
+        prompt_context.n_ctx = params.n_ctx;
+        
+        //get new input using recursion
+        set_console_color(con_st, PROMPT);
+        std::cout << "Chat context reset.";
+        return get_input(con_st, input, params, prompt_context, model);
+    }
 
     if (input == "exit" || input == "quit") {       
         llmodel_model_destroy(model);
@@ -90,6 +105,13 @@ void save_chat_log(std::string save_log, std::string prompt, std::string answer)
     }
 }
 
+std::string read_chat_log(std::string load_log) {
+
+    std::ifstream ifs(load_log);
+    std::string content((std::istreambuf_iterator<char>(ifs)),
+                         std::istreambuf_iterator<char>());
+    return content;
+}
 
 std::string random_prompt(int32_t seed) {
     const std::vector<std::string> prompts = {
@@ -285,6 +307,8 @@ void print_usage(int argc, char** argv, const chatParams& params) {
     fprintf(stderr, "                        load prompt template from a txt file at FNAME (default: empty/no)\n");
     fprintf(stderr, "  --save_log        FNAME\n");
     fprintf(stderr, "                        save chat log to a file at FNAME (default: empty/no)\n");
+    fprintf(stderr, "  --load_log        FNAME\n");
+    fprintf(stderr, "                        load chat log from a file at FNAME (default: empty/no)\n");
     fprintf(stderr, "  -m FNAME, --model FNAME\n");
     fprintf(stderr, "                        model path (current: %s)\n", params.model.c_str());
     fprintf(stderr, "\n");
@@ -340,6 +364,8 @@ bool parse_params(int argc, char** argv, chatParams& params) {
             params.load_template = argv[++i];
         } else if (arg == "--save_log") {
             params.save_log = argv[++i];
+        } else if (arg == "--load_log") {
+            params.load_log = argv[++i];
         } else if (arg == "--server") {
             params.server = true;
         }else if (arg == "--ssl_server") {

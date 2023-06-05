@@ -96,13 +96,13 @@ int main(int argc, char* argv[]) {
     std::string input = "";
     if (!params.no_interactive) {
         //Interactive mode. Else get prompt from input or from params.
-        input = get_input(con_st, input, model);
+        input = get_input(con_st, input, params, prompt_context, model);
         if (params.openai) { process_openai_input(input, params, model, prompt_context, prompt_template); }
         else { process_chat_input(input, params, model, prompt_context, prompt_template); }
         //Interactive and continuous mode. Get prompt from input.
         while (!params.run_once) {
             answer = "";
-            input = get_input(con_st, input, model);
+            input = get_input(con_st, input, params, prompt_context, model);
         if (params.openai) { process_openai_input(input, params, model, prompt_context, prompt_template); }
         else { process_chat_input(input, params, model, prompt_context, prompt_template); }
 

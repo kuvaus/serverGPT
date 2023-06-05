@@ -19,6 +19,13 @@ void process_openai_input(std::string& input, chatParams& params, llmodel_model&
 
     std::string prompt = params.prompt != "" ? params.prompt + " " + input : input;
     std::string full_prompt = std::get<0>(prompt_template) + std::get<1>(prompt_template) + prompt + std::get<2>(prompt_template);
+
+    //load chat log
+    if (params.load_log != "") {
+        full_prompt = std::get<0>(prompt_template) + read_chat_log(params.load_log) + std::get<1>(prompt_template) + prompt + std::get<2>(prompt_template);
+        //set it to empty again so that we run this only once in the beginning.
+        params.load_log == "";
+    }
     
     std::future<void> future;
 
@@ -91,7 +98,14 @@ void process_chat_input(std::string& input, chatParams& params, llmodel_model& m
     std::future<void> future;
     std::string prompt = params.prompt != "" ? params.prompt + " " + input : input;
     std::string full_prompt = std::get<0>(prompt_template) + std::get<1>(prompt_template) + prompt + std::get<2>(prompt_template);
-    
+
+    //load chat log
+    if (params.load_log != "") {
+        full_prompt = std::get<0>(prompt_template) + read_chat_log(params.load_log) + std::get<1>(prompt_template) + prompt + std::get<2>(prompt_template);
+        //set it to empty again so that we run this only once in the beginning.
+        params.load_log == "";
+    }
+
     if (params.use_animation) { stop_display = false; future = std::async(std::launch::async, display_frames); }
     llmodel_prompt(model, full_prompt.c_str(), prompt_callback, response_callback, recalculate_callback, &prompt_context); 
     if (params.use_animation) { stop_display = true; future.wait(); stop_display = false; }
